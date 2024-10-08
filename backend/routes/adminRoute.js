@@ -7,7 +7,6 @@ const adminRouter = express.Router()
 
 adminRouter.post('/add-doctor',authAdmin,upload.single('image'),addDoctor)
 adminRouter.post('/login',loginAdmin)
-
 adminRouter.get('/appointments',authAdmin,appointmentsAdmin)
 
 adminRouter.post('/cancel-appointment',authAdmin,appointmentCancel)

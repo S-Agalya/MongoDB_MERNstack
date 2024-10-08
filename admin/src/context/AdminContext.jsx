@@ -1,7 +1,8 @@
 import {createContext, useState} from 'react'
 import axios from 'axios'
 export const AdminContext = createContext()
-import toast from 'react-toastify'
+import {toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminContextProvider =(props)=>{
     const [aToken,setAToken]=useState('')
