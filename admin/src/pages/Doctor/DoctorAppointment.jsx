@@ -5,7 +5,7 @@ import { assets } from '../../assets/assets'
 
 const DoctorAppointment = () => {
 
-    const {dToken,appointments,getAppointments} = useContext(DoctorContext)
+    const {dToken,appointments,getAppointments,completeAppointment,cancelAppointment} = useContext(DoctorContext)
      const {calculateAge,slotDateFormat,currency}=useContext(AppContext)
     useEffect(()=>{
      if(dToken){
@@ -41,10 +41,13 @@ const DoctorAppointment = () => {
                 <p className='max-sm:hidden'>{calculateAge(item.userData.dob)}</p>
                 <p>{slotDateFormat(item.slotDate)},{item.slotTime}</p>
                 <p>{currency} {item.amount}</p>
+                {
+                  <item className="cancelled"></item>
+                }
                 <div className='flex'>
 
-                 <img className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
-                 <img className='w-10 cursor-pointer' src={assets.tick_icon} alt="" />
+                 <img onClick={()=>cancelAppointment(item._id)} className='w-10 cursor-pointer' src={assets.cancel_icon} alt="" />
+                 <img onClick={()=>completeAppointment(item._id)} className='w-10 cursor-pointer' src={assets.tick_icon} alt="" />
 
                 </div>
              </div>
