@@ -5,10 +5,43 @@ import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
 const AdminContextProvider =(props)=>{
-    const [aToken,setAToken]=useState('')
+    const [aToken,setAToken]=useState(localStorage.getItem('aToken') ?localStorage.getItem('aToken'):'' )
+
+    const [doctors,setDoctors] = useState([])
     const [appointments,setAppointments] = useState([])
-    const backendUrl=import.meta.env.BAC
+    const backendUrl=import.meta.env.VITE_BACKEND_URL
     const [dashData,setDashData]=useState(false)
+
+
+    const getAllDoctors = async () =>{
+
+      try{
+          const {data} = await axios.post(backendUrl + '/api/admin/all-doctors', {}, {headers:{aToken}})
+          if(data.success){
+              setDoctors(data.doctors)
+              console.log(data.doctors)
+          }else{
+              toast.error(data.message)
+          }
+      }catch (error){
+          toast.error(error.message)
+      }
+  }
+
+  const changeAvailability = async (docId) => {
+    try{
+        const {data} = await axios.post(backendUrl + '/api/admin/change-availability', {docId},{headers:{aToken}})
+        if(data.success){
+            toast.success(data.message)
+            getAllDoctors()
+        }else{
+            toast.error(data.message)
+        }
+
+    }catch (error){
+        toast.error(error.message)
+    }
+}
     
     const getAllAppointments = async() =>{
        try {
@@ -61,11 +94,12 @@ const AdminContextProvider =(props)=>{
 
 
    const value ={
-     aToken,setAToken,
+     aToken,setAToken,backendUrl,
      appointments,setAppointments,
      getAllAppointments,
     cancelAppointment,
-    dashData,getDashData
+    dashData,getDashData,getAllDoctors,doctors,
+    changeAvailability
    }
   return (
     <AdminContext.Provider value={value}>
